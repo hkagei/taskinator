@@ -13,6 +13,8 @@ if (!taskNameInput || !taskTypeInput) {
   return false;
   formEl.reset();
 }
+var isEdit = formEl.hasAttribute("data-task-id");
+console.log(isEdit);
   // package up data as an object
   var taskDataObj = {
       name: taskNameInput,
@@ -94,6 +96,13 @@ var taskButtonHandler = function(event) {
     editTask(taskId); 
     document.querySelector("#save-task").textContent = "Save Task";
     formEl.setAttribute("data-task-id", taskId);
+  }
+  else if (targetEl.matches(".delete-btn")) {
+    var taskId = targetEl.getAttribute("data-task-id");
+    deleteTask(taskId);
+  }
+    document.querySelector("#save-task").textContent = "Save Task";
+    formEl.setAttribute("data-task-id", taskId);
     var editTask = function(taskId) {
       console.log("editing task #" + taskId);
     
@@ -102,9 +111,10 @@ var taskButtonHandler = function(event) {
       
       // get content from task name and type
       var taskName = taskSelected.querySelector("h3.task-name").textContent;
-      console.log(taskName);
+      document.querySelector("input[name='task-name']").value = taskName;
+      
       var taskType = taskSelected.querySelector("span.task-type").textContent;
-      console.log(taskType);
+      document.querySelector("select[name='task-type']").value = taskType;
 
       document.querySelector("input[name='task-name']").value = taskName;
       document.querySelector("select[name='task-type']").value = taskType;
@@ -121,6 +131,14 @@ var taskButtonHandler = function(event) {
     taskSelected.remove();
   };
 
+  var taskButtonHandler = function(event) {
+    console.log(event.target);
 
+    if (event.target.matches(".delete-btn")) {
+       // get the element's task id
+       var taskId = event.target.getAttribute("data-task-id");
+       console.log(taskId);
+    }
+  };
 
 pageContentEl.addEventListener("click", taskButtonHandler);
